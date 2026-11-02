@@ -132,18 +132,18 @@
       </section>
 
       <section class="section" aria-labelledby="shippingTitle">
-        <div class="section-head"><div class="title-wrap"><span class="number">02</span><div><h2 id="shippingTitle">运费测算</h2><p>输入包装后的外箱尺寸</p></div></div><span class="formula-tag">每 0.5kg 计费</span></div>
+        <div class="section-head"><div class="title-wrap"><span class="number">02</span><div><h2 id="shippingTitle">运费测算</h2><p>输入外箱尺寸，或直接填写采用运费</p></div></div><span class="formula-tag">每 0.5kg 计费</span></div>
         <div class="dimension-entry"><div class="field"><label for="sizeInput">尺寸（长*宽*高）</label><div class="input-shell"><input id="sizeInput" type="text" inputmode="decimal" autocomplete="off" placeholder="例如：41*34*19"><span>cm</span></div></div></div>
         <div class="shipping-result">
           <div class="mini-stat"><span>体积重量</span><strong id="volumeWeight">—</strong></div>
           <div class="mini-stat"><span>计费重量</span><strong id="billingWeight">—</strong></div>
-          <div class="mini-stat primary"><span class="shipping-label">采用运费（可改）<button id="resetShipping" type="button" disabled>恢复参考</button></span><div class="shipping-edit"><b>¥</b><input id="shippingOverride" aria-label="采用运费" type="number" min="0" step="1" inputmode="decimal" placeholder="—"></div><small class="shipping-reference" id="shippingReference">等待尺寸</small></div>
+          <div class="mini-stat primary"><span class="shipping-label">采用运费（可改）<button id="resetShipping" type="button" disabled>恢复参考</button></span><div class="shipping-edit"><b>¥</b><input id="shippingOverride" aria-label="采用运费" type="number" min="0" step="1" inputmode="decimal" placeholder="直接输入"></div><small class="shipping-reference" id="shippingReference">等待尺寸或手动输入</small></div>
         </div>
         <p class="shipping-note" id="shippingNote">公式：长 × 宽 × 高 × 1.2 ÷ 5000，计费重量向上取整到0.5kg。</p>
       </section>
 
       <section class="section" aria-labelledby="productTitle">
-        <div class="section-head"><div class="title-wrap"><span class="number">03</span><div><h2 id="productTitle">三个版本报价</h2><p>B方案 · 整数美元报价已含运费</p></div></div><span class="formula-tag" id="marginTag">目标 40%</span></div>
+        <div class="section-head"><div class="title-wrap"><span class="number">03</span><div><h2 id="productTitle">三个版本报价</h2><p>B方案 · 满 $200 标注包邮</p></div></div><span class="formula-tag" id="marginTag">目标 40%</span></div>
         <div class="product-list">
           <div class="product-row">
             <div class="field"><div class="product-name"><span>拿货价</span></div><div class="input-shell"><span>¥</span><input id="basicCost" aria-label="无名称版本拿货价" type="number" min="0" step="0.01" inputmode="decimal" placeholder="输入人民币"></div></div>
@@ -267,15 +267,19 @@
       if(shippingReference&&!shippingManual)$('shippingOverride').value=String(shippingReference.fee);
       if(!shippingReference&&!shippingManual)$('shippingOverride').value='';
       const override=numeric('shippingOverride');
-      const shipping=shippingReference?{...shippingReference,referenceFee:shippingReference.fee,fee:override??shippingReference.fee}:null;
+      const shipping=shippingReference
+        ?{...shippingReference,referenceFee:shippingReference.fee,fee:override??shippingReference.fee}
+        :(shippingManual&&override!==null?{fee:override,referenceFee:null,volumeWeight:null,billingWeight:null,sizeText:null}:null);
       const factor=numeric('volumeFactor')??defaults.volumeFactor;
       const divisor=numeric('volumeDivisor')??defaults.volumeDivisor;
       const margin=numeric('targetMargin');
       $('shippingNote').textContent=`公式：长 × 宽 × 高 × ${factor} ÷ ${formatInteger(divisor)}，计费重量向上取整到0.5kg。`;
       $('marginTag').textContent=`目标 ${margin===null?'—':formatNumber(margin,1).replace('.0','')}%`;
-      $('volumeWeight').textContent=shipping?formatNumber(shipping.volumeWeight,2)+' kg':'—';
-      $('billingWeight').textContent=shipping?formatNumber(shipping.billingWeight,1)+' kg':'—';
-      $('shippingReference').textContent=shipping?(shippingManual?`参考 ¥${formatNumber(shipping.referenceFee,0)}`:'自动使用参考运费'):'等待尺寸';
+      $('volumeWeight').textContent=shippingReference?formatNumber(shippingReference.volumeWeight,2)+' kg':'—';
+      $('billingWeight').textContent=shippingReference?formatNumber(shippingReference.billingWeight,1)+' kg':'—';
+      $('shippingReference').textContent=shippingReference
+        ?(shippingManual?`参考 ¥${formatNumber(shipping.referenceFee,0)}`:'自动使用参考运费')
+        :(shipping?'手动输入运费':'等待尺寸或手动输入');
       $('resetShipping').disabled=!shippingManual;
 
       const invalidSettings=(margin!==null&&margin>=100)||(numeric('usdRate')!==null&&numeric('usdRate')<=0);
@@ -285,20 +289,20 @@
       const high=renderQuote('masterTopHighCost','masterTopHighQuote',shipping);
 
       if(shipping&&(basic||top||high)){
-        const messageLines=[`size: ${shipping.sizeText}cm`, ''];
+        const messageLines=shipping.sizeText?[`size: ${shipping.sizeText}cm`, '']:[];
         const quoteLines=[];
-        if(basic)quoteLines.push(`$${formatInteger(basic.roundedSaleUsd)}`);
-        if(top)quoteLines.push(`Master Top $${formatInteger(top.roundedSaleUsd)}`);
-        if(high)quoteLines.push(`Master Top High $${formatInteger(high.roundedSaleUsd)}`);
-        const shippingColumn=Math.max(...quoteLines.map(line=>line.length))+8;
-        messageLines.push(...quoteLines.map(line=>line.padEnd(shippingColumn,' ')+'includes shipping'));
+        if(basic)quoteLines.push({text:`$${formatInteger(basic.roundedSaleUsd)}`,amount:basic.roundedSaleUsd});
+        if(top)quoteLines.push({text:`Master Top $${formatInteger(top.roundedSaleUsd)}`,amount:top.roundedSaleUsd});
+        if(high)quoteLines.push({text:`Master Top High $${formatInteger(high.roundedSaleUsd)}`,amount:high.roundedSaleUsd});
+        const shippingColumn=Math.max(...quoteLines.map(line=>line.text.length))+8;
+        messageLines.push(...quoteLines.map(line=>line.amount>=200?line.text.padEnd(shippingColumn,' ')+'includes shipping':line.text));
         currentMessage=messageLines.join('\n');
         $('messagePreview').textContent=currentMessage;
         $('messagePreview').className='';
         $('copyButton').disabled=false;
       }else{
         currentMessage='';
-        $('messagePreview').textContent='完成尺寸并填写任意一个拿货价后，将自动生成英文报价消息。';
+        $('messagePreview').textContent='填写尺寸或采用运费，再填写任意一个拿货价后，将自动生成英文报价消息。';
         $('messagePreview').className='message-placeholder';
         $('copyButton').disabled=true;
       }
