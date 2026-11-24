@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101d35">
+  <title>美国物流渠道推荐计算器</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap');
+:root{font-family:'DM Sans','Noto Sans SC',system-ui,sans-serif;color:#17243d;background:#f5f7fb;font-size:16px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 94% 0%,#e7efff 0,transparent 31%),#f5f7fb}
+.shell{max-width:1160px;margin:auto;padding:0 28px}.header{height:78px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #dfe6f0}
+.brand{display:flex;align-items:center;gap:12px;font-size:16px;font-weight:700;letter-spacing:.02em}.brand-mark{display:grid;place-items:center;width:31px;height:31px;background:#2857d8;color:#fff;border-radius:9px;font-weight:800}.header-note,.unit-note{color:#7f8ba0;font-size:13px}
+.intro{padding:64px 0 46px}.eyebrow,.kicker{font-size:12px;font-weight:700;letter-spacing:.14em;color:#426be4}.intro h1{font-size:clamp(36px,5vw,62px);line-height:1.18;letter-spacing:-.045em;margin:18px 0 20px;font-weight:700}.intro h1 em{color:#3465e8;font-style:normal}.intro p{max-width:650px;line-height:1.8;color:#68758d;margin:0}
+.panel{background:#fff;border:1px solid #e5eaf2;border-radius:20px;box-shadow:0 16px 44px rgba(25,50,92,.055)}.form-panel{padding:32px 36px 34px}
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:27px}.section-head h2{font-size:24px;letter-spacing:-.025em;margin:6px 0 0}.field-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px 16px}.field{display:flex;flex-direction:column;gap:9px;min-width:0}.field span{font-size:14px;font-weight:600}.field b{font-size:12px;font-weight:500;color:#9ba6b9}.field input,.field select{height:48px;min-width:0;border:1px solid #dce3ee;background:#fff;color:#192944;border-radius:9px;padding:0 13px;font:inherit;outline:none;transition:border-color .2s,box-shadow .2s}.field input::placeholder{color:#aab4c4}.field input:focus,.field select:focus{border-color:#4874ee;box-shadow:0 0 0 3px #4874ee22}.field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='m4 6 4 4 4-4' fill='none' stroke='%237789a3' stroke-width='1.5'/%3E%3C/svg%3E");background-position:right 13px center;background-repeat:no-repeat;padding-right:36px}.shoe-field[hidden]{display:none}
+.form-bottom{border-top:1px solid #edf0f5;margin-top:31px;padding-top:25px;display:flex;align-items:center;justify-content:space-between;gap:20px}.form-bottom p{margin:0;color:#8a96a9;font-size:13px}.form-bottom button{border:0;background:#2f60e8;color:white;border-radius:10px;padding:15px 28px;font:700 15px inherit;font-family:inherit;cursor:pointer;box-shadow:0 8px 18px #3262de36;white-space:nowrap}.form-bottom button:hover{background:#244fc7}.form-bottom button:disabled{opacity:.5;cursor:not-allowed}.error{color:#bb3030;font-weight:600;margin:16px 0 0}
+.results{padding:60px 0 18px}.results-head{margin-bottom:22px}.result-count{font-size:13px;color:#78869c}.summary-strip{display:grid;grid-template-columns:repeat(3,1fr);background:#eaf0fc;border:1px solid #dce6fa;border-radius:12px;padding:20px 24px;gap:16px;margin-bottom:20px}.summary-strip span{display:flex;flex-direction:column;gap:6px}.summary-strip small,.card-stats span{font-size:12px;color:#78869c}.summary-strip strong{font-size:15px}.eligible{color:#208766}.ineligible{color:#875c35}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.result-card{min-width:0;background:#fff;border:1px solid #e4eaf3;border-radius:16px;padding:23px;box-shadow:0 8px 28px #172d5710}.card-top{display:flex;justify-content:space-between;align-items:center;gap:10px}.rank{color:#4169d9;background:#edf2ff;border-radius:30px;padding:6px 10px;font-size:12px;font-weight:700}.valid-dot{font-size:12px;color:#35916f}.result-card h3{font-size:20px;margin:23px 0 9px}.price{color:#1f4fd5;font-size:31px;font-weight:700;letter-spacing:-.04em}.price small{font-size:12px;font-weight:500;color:#9aa6b9;letter-spacing:0}.card-stats{display:grid;grid-template-columns:1fr 1fr;gap:14px;border-top:1px solid #eef1f6;border-bottom:1px solid #eef1f6;padding:18px 0;margin:20px 0}.card-stats div{display:flex;flex-direction:column;gap:6px}.card-stats strong{font-size:14px}.reason{color:#64728a;font-size:13px;line-height:1.6;min-height:42px}.result-card details{border-top:1px solid #eef1f6;padding-top:15px;margin-top:15px}.result-card summary,.audit summary{cursor:pointer;color:#3a63ca;font-size:13px;font-weight:700}.result-card ol{padding-left:19px;color:#66748a;font-size:12px;line-height:1.8}.result-card li{margin:6px 0}.empty{background:white;border:1px dashed #cbd7eb;padding:34px;border-radius:14px;color:#66748a}.audit{margin-top:25px;background:white;border:1px solid #e4eaf3;border-radius:13px;padding:20px 24px}.audit-list{margin-top:14px}.audit-row{display:grid;grid-template-columns:160px 70px 1fr;gap:10px;align-items:start;border-top:1px solid #edf1f6;padding:13px 0;font-size:13px}.audit-row span{color:#ae7440}.audit-row p{margin:0;color:#728098;line-height:1.5}.source-note{font-size:12px;color:#96a1b1;margin:19px 0}.shell footer{border-top:1px solid #e1e7f0;color:#9aa5b6;font-size:12px;padding:28px 0 34px;margin-top:36px}
+@media(max-width:800px){.field-grid{grid-template-columns:repeat(2,1fr)}.cards{grid-template-columns:1fr 1fr}.audit-row{grid-template-columns:140px 65px 1fr}}
+@media(max-width:600px){.shell{padding:0 18px}.header{height:64px}.header-note{display:none}.intro{padding:48px 0 34px}.intro h1{font-size:37px}.intro p{font-size:14px}.form-panel{padding:23px 19px}.section-head h2{font-size:21px}.field-grid{gap:17px 12px}.field input,.field select{height:45px}.form-bottom{align-items:stretch;flex-direction:column}.form-bottom button{width:100%}.summary-strip{grid-template-columns:1fr;gap:15px}.cards{grid-template-columns:1fr}.results{padding-top:42px}.audit-row{grid-template-columns:1fr auto;gap:5px}.audit-row p{grid-column:1/-1}}
+.header{height:60px}
+.form-panel{margin-top:24px;padding:26px 30px}
+.section-head{margin-bottom:20px}
+.section-head h1{font-size:24px;line-height:1.3;margin:0}
+.form-subtitle{color:#7d899e;font-size:13px;margin:5px 0 0}
+.field-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}
+.form-bottom{margin-top:23px;padding-top:18px}
+.results{padding-top:36px}
+@media(max-width:800px){.field-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.header{height:56px}.form-panel{margin-top:14px;padding:20px 18px}.section-head h1{font-size:21px}.unit-note{display:none}.field-grid{grid-template-columns:1fr;gap:14px}.form-bottom{margin-top:20px}.results{padding-top:28px}}
+
+</style>
+</head>
+<body>
+  <main class="shell">
+    <header class="header">
+      <div class="brand"><span class="brand-mark">M</span><span>美国物流报价助手</span></div>
+      <span class="header-note">最新报价 · 逐渠道核算</span>
+    </header>
+    <section class="panel form-panel" aria-labelledby="form-title">
+      <div class="section-head"><div><h1 id="form-title">美国物流渠道计算器</h1><p class="form-subtitle">输入包裹信息，快速核价</p></div><span class="unit-note">重量 KG · 尺寸 CM</span></div>
+      <form id="quote-form">
+        <div class="field-grid">
+          <label class="field"><span>实际重量 <b>KG</b></span><input name="actual" type="number" min="0.01" step="any" placeholder="例如 4.54" required></label>
+          <label class="field"><span>尺寸 <b>长*宽*高，CM</b></span><input name="dimensions" type="text" inputmode="decimal" placeholder="例如 50.5*46*22.5" required></label>
+          <label class="field"><span>产品名称</span><input name="product" type="text" placeholder="例如 真皮手提包"></label>
+          <label class="field"><span>产品类型</span><select name="productType"><option value="clothes">服装</option><option value="shoes">鞋子</option><option value="bags">包包</option><option value="jewelry">银饰珠宝</option><option value="other" selected>其他</option></select></label>
+          <label class="field shoe-field" id="shoe-field" hidden><span>鞋盒数量</span><select name="shoeBox"><option value="single">单鞋盒</option><option value="double">双鞋盒</option><option value="multi">多双鞋</option></select></label>
+          <label class="field"><span>美国 ZIP Code</span><input name="zip" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="例如 85367" required></label>
+        </div>
+        <div class="form-bottom"><p>小包专线准入：实际 ≤ 5KG、最长边 ≤ 50CM、三边和 ≤ 110CM</p><button type="submit">计算并推荐渠道</button></div>
+        <p class="error" id="error" role="alert" hidden></p>
+      </form>
+    </section>
+    <section id="results" class="results" hidden aria-live="polite"></section>
+    <footer>报价以配置文件中的表格为准 · 实际发货前请复核待确认规则</footer>
+  </main>
+  <script type="module">
+const round = (n, digits = 2) => Number(n.toFixed(digits));
+const number = value => Number(value);
+
+function calculateUsps(input,channel,config,basics) {
+  const {actual,length,width,height,productType,shoeBox} = input;
+  const {volumeCm3,longest,sideSum,smallParcelEligible} = basics;
+  const steps = [], issues = [];
+  let status = 'valid';
+  const pending = message => {issues.push(message); if(status==='valid') status='pending';};
+  const unavailable = message => {issues.push(message); status='unavailable';};
+  if (!smallParcelEligible) unavailable('不满足小包专线三项准入条件');
+  if (actual <= 0.05) unavailable('USPS 报价从大于 0.05KG 开始');
+  const volumeKg = volumeCm3 / channel.divisor;
+  steps.push(`体积重量：${round(volumeCm3)} ÷ ${channel.divisor} = ${round(volumeKg,3)} KG`);
+  let billableKg = Math.max(actual,volumeKg);
+  if (productType==='shoes' && shoeBox!=='multi') {
+    if (!config.shoe.girthFormula) {
+      pending('单双鞋盒周长的计算公式待确认');
+      billableKg = null;
+    } else {
+      const girth = config.shoe.girthFormula==='girth' ? longest+2*(sideSum-longest) : sideSum;
+      billableKg = girth <= config.shoe.girthLimitCm ? actual : Math.max(actual,volumeKg);
+      steps.push(`单双鞋盒周长 ${round(girth)}CM；${girth<=config.shoe.girthLimitCm?'免抛':'超过 90CM，按材积÷8000 计抛'}`);
+    }
+  } else steps.push(`实际与体积取较大值：${round(billableKg,3)} KG`);
+  let tierKg = null, basePrice = null, total = null;
+  if (billableKg != null) {
+    tierKg = round(Math.ceil((billableKg-1e-9)/channel.weightRoundStepKg)*channel.weightRoundStepKg);
+    steps.push(`计费重量向上进位 ${channel.weightRoundStepKg}KG：${tierKg} KG`);
+    const band = channel.registrationBands.find(b=>actual>b.aboveKg && actual<=b.upToKg);
+    if (!band) unavailable('实际重量没有对应的挂号费区间');
+    if (tierKg>5) unavailable('计费重量超过 USPS 报价上限 5KG');
+    if (band && tierKg<=5) {
+      const freight=round(tierKg*channel.perKgPrice);
+      basePrice=round(freight+band.fee);
+      total=basePrice;
+      steps.push(`运费：${tierKg} × ¥${channel.perKgPrice} = ¥${freight}`);
+      steps.push(`实际重量 ${actual}KG 所在区间 (${band.aboveKg}, ${band.upToKg}]：挂号费 ¥${band.fee}/票`);
+      steps.push(`合计：¥${freight} + ¥${band.fee} = ¥${total}（图中价格已完整）`);
+    }
+  }
+  return {channel,status,issues,steps,volumeKg:round(volumeKg,3),
+    billableKg:billableKg==null?null:round(billableKg,3),tierKg,basePrice,customsFee:0,total};
+}
+
+function calculate(input, config) {
+  const {actual,length,width,height,zip,productType,shoeBox} = input;
+  const volumeCm3 = length * width * height;
+  const longest = Math.max(length,width,height);
+  const sideSum = length + width + height;
+  const smallParcelEligible = actual <= 5 && longest <= 50 && sideSum <= 110;
+  const basics = {volumeCm3,longest,sideSum,smallParcelEligible};
+  const results = config.channels.map(channel => {
+    if (channel.pricingMode==='perKgPlusRegistration')
+      return calculateUsps(input,channel,config,basics);
+    const steps = [];
+    const issues = [];
+    let status = 'valid';
+    const pending = message => { issues.push(message); if (status === 'valid') status = 'pending'; };
+    const unavailable = message => { issues.push(message); status = 'unavailable'; };
+    if (channel.tags.includes('smallParcel') && !smallParcelEligible) unavailable('不满足小包专线三项准入条件');
+    if (channel.restrictedZones.length) {
+      const zone = config.zipZones[zip];
+      if (!zone) pending('该 ZIP 的承运商分区未确认');
+      else if (channel.restrictedZones.includes(zone)) unavailable(`承运商 ${zone} 区禁发`);
+    }
+    let volumeKg = null;
+    let billableKg = null;
+    if (channel.divisor == null) {
+      pending('体积除数未在报价表中写明');
+      steps.push('体积重量：除数待确认');
+    } else {
+      volumeKg = volumeCm3 / channel.divisor;
+      steps.push(`体积重量：${round(volumeCm3)} ÷ ${channel.divisor} = ${round(volumeKg,3)} KG`);
+      const free = channel.mode === 'threshold' && actual <= channel.freeActualMax && volumeKg <= channel.freeVolumeMax;
+      billableKg = free ? actual : Math.max(actual,volumeKg);
+      steps.push(free
+        ? `符合该渠道免抛门槛，按实际重量 ${actual} KG`
+        : `实际与体积取较大值：${round(billableKg,3)} KG`);
+    }
+    if (productType === 'shoes' && shoeBox !== 'multi') {
+      if (!config.shoe.girthFormula) {
+        pending('鞋盒“周长”计算公式待确认');
+        steps.push('单双鞋盒：周长 ≤ 90CM 免抛；超出按材积÷8000。周长公式尚未确定。');
+        billableKg = null;
+      } else {
+        const girth = config.shoe.girthFormula === 'girth'
+          ? longest + 2 * (sideSum - longest) : sideSum;
+        billableKg = girth <= config.shoe.girthLimitCm
+          ? actual : Math.max(actual,volumeCm3 / config.shoe.overLimitDivisor);
+        steps.push(`鞋盒周长 ${round(girth)}CM；${girth <= 90 ? '免抛' : '材积÷8000 计抛'}`);
+      }
+    }
+    if (billableKg != null && channel.minBillableKg != null) {
+      billableKg = Math.max(billableKg,channel.minBillableKg);
+      steps.push(`该渠道最低计费重量 ${channel.minBillableKg} KG`);
+    }
+    let tierKg = null;
+    let basePrice = null;
+    if (billableKg != null) {
+      tierKg = round(Math.ceil((billableKg - 1e-9) / config.weightStepKg) * config.weightStepKg);
+      steps.push(`向上匹配报价表 ${config.weightStepKg} KG 档：${tierKg} KG`);
+      basePrice = channel.prices[String(tierKg)] ?? null;
+      if (basePrice == null) unavailable(`报价表 ${tierKg} KG 档无价格`);
+      else steps.push(`报价表基础运费：¥${basePrice}`);
+    }
+    let customsFee = null;
+    if (channel.customs === 'included') {
+      customsFee = 0;
+      steps.push('双清已含：¥0');
+    } else if (channel.customs === 'extra') {
+      if (channel.customsIncludedFromKg != null && tierKg != null && tierKg >= channel.customsIncludedFromKg) {
+        customsFee = 0;
+        steps.push(`${channel.customsIncludedFromKg}KG 档起报价已含双清：附加费 ¥0`);
+      } else if (!channel.customsWeightBasis) pending('双清 ¥8/KG 的计重基数待确认');
+      else if (billableKg != null) {
+        const basis = channel.customsWeightBasis === 'actual' ? actual : tierKg;
+        customsFee = round(basis * channel.customsYuanPerKg);
+        steps.push(`双清：${basis} × ¥${channel.customsYuanPerKg} = ¥${customsFee}`);
+      }
+    } else pending('双清费用未提供');
+    const total = basePrice != null && customsFee != null ? round(basePrice + customsFee) : null;
+    if (total != null) steps.push(`合计：¥${basePrice} + ¥${customsFee} = ¥${total}`);
+    return {channel,status,issues,steps,volumeKg:volumeKg == null ? null : round(volumeKg,3),
+      billableKg:billableKg == null ? null : round(billableKg,3),tierKg,basePrice,customsFee,total};
+  });
+  return {basics,results};
+}
+
+function recommend(calculation) {
+  const valid = calculation.results.filter(r => r.status === 'valid' && r.total != null);
+  const byPrice = [...valid].sort((a,b) => a.total-b.total);
+  const chosen = [];
+  const add = (item,reason) => {
+    if (item && !chosen.some(x => x.result.channel.id === item.channel.id))
+      chosen.push({result:item,reason});
+  };
+  const small = calculation.basics.smallParcelEligible
+    ? byPrice.find(r => r.channel.tags.includes('smallParcel')) : null;
+  add(small ?? byPrice[0],small ? '符合小包准入，优先推荐专线' : '当前可核价渠道中运费最低');
+  add(valid.find(r => r.channel.id === 'shenzhen-fedex'),
+    '深圳联邦，报价表预计约 7 天');
+  const bulky = byPrice.find(r => r.channel.tags.includes('bulky'));
+  add(bulky, '大体积轻货方向，在可核价的 UPS-F 渠道中运费最低');
+  for (const result of byPrice) {
+    if (chosen.length >= 3) break;
+    add(result,'补充可核价渠道，供比较');
+  }
+  return chosen.slice(0,3);
+}
+
+function validateInput(raw) {
+  const actual=number(raw.actual);
+  if (!Number.isFinite(actual) || actual <= 0) return '实际重量必须大于 0';
+  if (!parseDimensions(raw.dimensions)) return '尺寸请输入 长*宽*高，例如 50.5*46*22.5';
+  if (!/^\d{5}$/.test(raw.zip)) return '请输入 5 位美国 ZIP Code';
+  return null;
+}
+
+function parseDimensions(value) {
+  const match=String(value ?? '').trim().match(/^(\d+(?:\.\d+)?)\s*[*×xX＊]\s*(\d+(?:\.\d+)?)\s*[*×xX＊]\s*(\d+(?:\.\d+)?)$/);
+  if (!match) return null;
+  const [length,width,height]=match.slice(1).map(Number);
+  return [length,width,height].every(n=>Number.isFinite(n)&&n>0) ? {length,width,height} : null;
+}
+
+
+const form = document.querySelector('#quote-form');
+const resultsEl = document.querySelector('#results');
+const errorEl = document.querySelector('#error');
+const shoeField = document.querySelector('#shoe-field');
+const typeField = form.elements.productType;
+const config = {"source":{"file":"MXS快递价格表_(2).xlsx","originalSheet":"Sheet1","usps":"用户提供的 USPS 标准小包-F（盒装）报价图","sha256":"AC8FC5ACF362491870141D1327F7960EE07237F46A5B2953DF0F403578F37DB5","note":"快递渠道来自用户指定工作簿；USPS 小包来自用户提供的报价图。美国联邦-F ÷5500、新加坡 UPS-F 暂时忽略 8、9 区、单清价按最终计费重量另加双清 ¥8/KG，均按用户补充。香港联邦-F 从 3KG 档起为双清价，无额外 ¥8/KG。USPS 图中价格已完整，按 0.5KG 进位。鞋盒 90CM/8000 按用户要求。"},"currency":"CNY","weightStepKg":0.5,"shoe":{"girthLimitCm":90,"overLimitDivisor":8000,"girthFormula":null},"zipZones":{},"channels":[{"id":"small-parcel-line","name":"USPS 标准小包-F（盒装）","divisor":8000,"mode":"standard","pricingMode":"perKgPlusRegistration","perKgPrice":123,"weightRoundStepKg":0.5,"registrationBands":[{"aboveKg":0.05,"upToKg":0.2,"fee":36},{"aboveKg":0.2,"upToKg":0.45,"fee":36},{"aboveKg":0.45,"upToKg":0.7,"fee":32},{"aboveKg":0.7,"upToKg":1,"fee":32},{"aboveKg":1,"upToKg":1.5,"fee":30},{"aboveKg":1.5,"upToKg":5,"fee":28}],"freeActualMax":null,"freeVolumeMax":null,"customs":"included","customsYuanPerKg":0,"customsWeightBasis":"included","eta":"15–18 天","tags":["smallParcel"],"minBillableKg":null,"restrictedZones":[],"prices":{}},{"id":"mainland-ups","name":"大陆 UPS 6000","divisor":6000,"mode":"standard","freeActualMax":null,"freeVolumeMax":null,"customs":"extra","customsYuanPerKg":8,"customsWeightBasis":"billable","eta":"约 7 天","tags":[],"minBillableKg":null,"customsIncludedFromKg":null,"restrictedZones":[],"prices":{"3":515,"4":643,"5":774,"6":899,"7":1027,"8":1141,"9":1268,"10":1394,"11":1499,"12":1618,"13":1738,"14":1857,"15":1976,"16":2095,"17":2217,"18":2340,"19":2464,"20":2586,"2.5":449,"3.5":579,"4.5":710,"5.5":835,"6.5":963,"7.5":1093,"8.5":1204,"9.5":1332,"10.5":1440,"11.5":1559,"12.5":1679,"13.5":1798,"14.5":1917,"15.5":2036,"16.5":2155,"17.5":2280,"18.5":2400,"19.5":2526}},{"id":"shenzhen-fedex","name":"深圳联邦","divisor":5000,"mode":"threshold","freeActualMax":2.5,"freeVolumeMax":3,"customs":"extra","customsYuanPerKg":8,"customsWeightBasis":"billable","eta":"约 7 天","tags":[],"minBillableKg":null,"customsIncludedFromKg":null,"restrictedZones":[],"prices":{"1":298,"2":370,"3":518,"4":637,"5":757,"6":851,"7":984,"8":1076,"9":1186,"10":1312,"11":1394,"12":1511,"13":1592,"14":1707,"15":1821,"16":1943,"17":2057,"18":2171,"19":2286,"20":2400,"0.5":258,"1.5":330,"2.5":418,"3.5":578,"4.5":697,"5.5":784,"6.5":918,"7.5":1051,"8.5":1123,"9.5":1249,"10.5":1336,"11.5":1453,"12.5":1535,"13.5":1649,"14.5":1764,"15.5":1886,"16.5":2000,"17.5":2114,"18.5":2229,"19.5":2343,"20.5":2457}},{"id":"malaysia-ups-f","name":"马来 UPS-F","divisor":null,"mode":"threshold","freeActualMax":5,"freeVolumeMax":2,"customs":"extra","customsYuanPerKg":8,"customsWeightBasis":"billable","eta":"10–12 天","tags":["bulky"],"minBillableKg":null,"customsIncludedFromKg":null,"restrictedZones":[],"prices":{"1":323,"2":405,"3":495,"4":578,"5":636,"0.5":275,"1.5":355,"2.5":448,"3.5":530,"4.5":626}},{"id":"singapore-ups-f","name":"新加坡 UPS-F","divisor":null,"mode":"threshold","freeActualMax":9,"freeVolumeMax":20,"customs":"extra","customsYuanPerKg":8,"customsWeightBasis":"billable","eta":"10–12 天","tags":["bulky"],"minBillableKg":null,"customsIncludedFromKg":null,"restrictedZones":[],"prices":{"1":331,"2":415,"3":497,"4":579,"5":805,"6":958,"7":1076,"8":1225,"9":1341,"0.5":282,"1.5":375,"2.5":447,"3.5":530,"4.5":743,"5.5":899,"6.5":1017,"7.5":1167,"8.5":1283}},{"id":"air-ups-f","name":"空派 UPS-F","divisor":6000,"mode":"standard","freeActualMax":null,"freeVolumeMax":null,"customs":"included","customsYuanPerKg":0,"customsWeightBasis":"included","eta":"10–15 天","tags":["bulky"],"minBillableKg":null,"customsIncludedFromKg":null,"restrictedZones":[],"prices":{"1":196,"2":290,"3":390,"4":495,"5":582,"6":680,"7":780,"8":879,"9":978,"10":1077,"11":1176,"12":1272,"13":1378,"14":1485,"15":1590,"16":1696,"17":1802,"18":1908,"19":2015,"20":2120,"0.5":155,"1.5":245,"2.5":342,"3.5":445,"4.5":546,"5.5":632,"6.5":730,"7.5":830,"8.5":929,"9.5":1028,"10.5":1127,"11.5":1226,"12.5":1325,"13.5":1431,"14.5":1537,"15.5":1643,"16.5":1749,"17.5":1855,"18.5":1960,"19.5":2067}},{"id":"us-fedex-f","name":"美国联邦-F","divisor":5500,"mode":"threshold","freeActualMax":2.5,"freeVolumeMax":3.5,"customs":"included","customsYuanPerKg":0,"customsWeightBasis":"included","eta":"约 10 天","tags":[],"minBillableKg":null,"customsIncludedFromKg":null,"restrictedZones":[],"prices":{"1":230,"2":315,"3":415,"0.5":180,"1.5":270,"2.5":355}},{"id":"us-fedex-economy-f","name":"美国联邦经济线-F","divisor":6000,"mode":"standard","freeActualMax":null,"freeVolumeMax":null,"customs":"included","customsYuanPerKg":0,"customsWeightBasis":"included","eta":"10–15 天","tags":[],"minBillableKg":null,"customsIncludedFromKg":null,"restrictedZones":[],"prices":{"1":193,"2":285,"3":385,"0.5":150,"1.5":240,"2.5":337}},{"id":"hk-fedex-f","name":"香港联邦-F","divisor":5000,"mode":"threshold","freeActualMax":2.5,"freeVolumeMax":3.1,"customs":"extra","customsYuanPerKg":8,"customsWeightBasis":"billable","eta":"约 7 天","tags":[],"minBillableKg":null,"customsIncludedFromKg":3,"restrictedZones":[],"prices":{"1":230,"2":308,"3":430,"4":530,"5":628,"6":739,"7":839,"8":940,"9":1037,"10":1139,"11":1345,"12":1449,"13":1615,"14":1723,"15":1833,"16":1942,"17":2052,"18":2161,"19":2270,"20":2380,"0.5":200,"1.5":263,"2.5":340,"3.5":480,"4.5":579,"5.5":689,"6.5":790,"7.5":890,"8.5":992,"9.5":1089,"10.5":1291,"11.5":1397,"12.5":1560,"13.5":1669,"14.5":1779,"15.5":1888,"16.5":1997,"17.5":2107,"18.5":2216,"19.5":2326}}]};
+typeField.addEventListener('change', () => {shoeField.hidden = typeField.value !== 'shoes';});
+const escapeHtml = value => String(value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const money = value => `¥${Number(value).toLocaleString('zh-CN',{minimumFractionDigits:0,maximumFractionDigits:2})}`;
+const label = (id,index) => id === 'small-parcel-line' ? '便宜优先 · 小包专线' : index === 0 ? '便宜优先' : id === 'shenzhen-fedex' ? '时效优先' : ['malaysia-ups-f','singapore-ups-f','air-ups-f'].includes(id) ? '大体积轻货' : '可核价备选';
+
+form.addEventListener('submit', event => {
+  event.preventDefault();
+  if (!config) return;
+  const fd = new FormData(form);
+  const input = Object.fromEntries(fd.entries());
+  const error = validateInput(input);
+  errorEl.hidden = !error;
+  if (error) {errorEl.textContent = error; return;}
+  input.actual = Number(input.actual);
+  Object.assign(input,parseDimensions(input.dimensions));
+  const calc = calculate(input,config);
+  const picks = recommend(calc);
+  const pending = calc.results.filter(r=>r.status !== 'valid');
+  const facts = calc.basics;
+  const cards = picks.map(({result:r,reason},index)=>`
+    <article class="result-card">
+      <div class="card-top"><span class="rank">${escapeHtml(label(r.channel.id,index))}</span><span class="valid-dot">已核价</span></div>
+      <h3>${escapeHtml(r.channel.name)}</h3>
+      <div class="price">${money(r.total)} <small>人民币 / 票</small></div>
+      <div class="card-stats"><div><span>计费重量</span><strong>${r.tierKg} KG</strong></div><div><span>预计时效</span><strong>${escapeHtml(r.channel.eta)}</strong></div></div>
+      <p class="reason">${escapeHtml(reason)}</p>
+      <details><summary>查看计算过程</summary><ol>${r.steps.map(s=>`<li>${escapeHtml(s)}</li>`).join('')}</ol></details>
+    </article>`).join('');
+  resultsEl.innerHTML = `
+    <div class="section-head results-head"><div><span class="kicker">02 / 计算结果</span><h2>渠道推荐</h2></div><span class="result-count">${picks.length} 个有效渠道</span></div>
+    <div class="summary-strip">
+      <span><small>包裹体积</small><strong>${round(facts.volumeCm3).toLocaleString('zh-CN')} CM³</strong></span>
+      <span><small>最长边 / 三边和</small><strong>${round(facts.longest)} / ${round(facts.sideSum)} CM</strong></span>
+      <span><small>小包专线</small><strong class="${facts.smallParcelEligible?'eligible':'ineligible'}">${facts.smallParcelEligible?'符合尺寸重量条件':'不符合准入条件'}</strong></span>
+    </div>
+    ${picks.length ? `<div class="cards">${cards}</div>` : '<div class="empty">当前没有能完整核价的渠道。请先补齐待确认规则和对应重量档价格。</div>'}
+    <details class="audit"><summary>查看未入选渠道及待确认项（${pending.length}）</summary>
+      <div class="audit-list">${pending.map(r=>`<div class="audit-row"><strong>${escapeHtml(r.channel.name)}</strong><span>${r.status==='unavailable'?'不可用':'待确认'}</span><p>${escapeHtml(r.issues.join('；'))}</p></div>`).join('')}</div>
+    </details>
+    <p class="source-note">依据：${escapeHtml(config.source.file)}、USPS 小包报价图 · 报价表空白档位不补价</p>
+  `;
+  resultsEl.hidden = false;
+  resultsEl.scrollIntoView({behavior:'smooth',block:'start'});
+});
+
+</script>
+</body>
+</html>
